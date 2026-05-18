@@ -29,7 +29,6 @@
       font-family: Arial, sans-serif;
     }
 
-    /* Original Dark overlay */
     body::before {
       content: "";
       position: absolute;
@@ -38,20 +37,18 @@
       z-index: 0;
     }
 
-    /* Particle Canvas overlay */
     #particleCanvas {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       z-index: 1;
-      pointer-events: none; /* Keeps canvas from blocking clicks/taps */
+      pointer-events: none;
     }
 
-    /* Original Logo styling */
     .logo {
       position: relative;
-      z-index: 2; /* Sits cleanly above the floating particles */
+      z-index: 2;
 
       width: min(80vw, 700px);
       height: auto;
@@ -60,7 +57,6 @@
       filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));
     }
 
-    /* Smaller phones */
     @media (max-width: 600px) {
       .logo {
         width: 90vw;
@@ -71,21 +67,18 @@
 
 <body>
 
-  <!-- Particle container -->
   <canvas id="particleCanvas"></canvas>
 
   <img 
-    src="Grassroots logo 2.svg" 
+    src="Grassroots logo.svg" 
     alt="Grassroots Insurance Logo" 
     class="logo"
   />
 
-  <!-- Lightweight script to handle the bubble effect -->
   <script>
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
 
-    // Handle responsive resizing
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -94,12 +87,11 @@
     resizeCanvas();
 
     const particles = [];
-    const particleCount = 45; // Controls density of the bubbles
+    const particleCount = 45;
 
     class BubbleParticle {
       constructor() {
         this.reset();
-        // Randomly distribute particles vertically on initial load
         this.y = Math.random() * canvas.height; 
       }
 
@@ -116,15 +108,13 @@
 
       update() {
         this.y -= this.speedY;
-        // Creates a gentle, fluid sway like bubbles rising in liquid
+
         this.x += Math.sin(this.y * this.wobbleSpeed) * this.wobbleDistance;
 
-        // Fade out gracefully as they approach the top edge
         if (this.y < canvas.height * 0.15) {
           this.opacity -= 0.005;
         }
 
-        // Recycle particle once it vanishes or goes off screen
         if (this.y < 0 || this.opacity <= 0) {
           this.reset();
         }
@@ -134,8 +124,7 @@
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
-        
-        // Gives the particles a soft, ambient glow
+  
         ctx.shadowBlur = 6;
         ctx.shadowColor = 'rgba(255, 255, 255, 0.4)';
         
@@ -143,12 +132,10 @@
       }
     }
 
-    // Initialize particles array
     for (let i = 0; i < particleCount; i++) {
       particles.push(new BubbleParticle());
     }
 
-    // Animation loop
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
